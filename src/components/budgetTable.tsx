@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatCurrency, formatDate } from "@/lib/format";
 
 type Props = {
   items: BudgetItem[];
@@ -33,8 +34,10 @@ export function BudgetTable({ items }: Props) {
           <TableRow key={index}>
             <TableCell>{item.title}</TableCell>
             <TableCell>{item.category}</TableCell>
-            <TableCell>{item.date}</TableCell>
-            <TableCell className="text-right">{item.value}</TableCell>
+            <TableCell>{formatDate(item.date)}</TableCell>
+            <TableCell className="text-right">
+              {formatCurrency(item.value)}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
