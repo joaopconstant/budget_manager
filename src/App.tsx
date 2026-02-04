@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex min-h-svh flex-col">
+    <div className="flex min-h-svh flex-col p-20">
       <h1>Budget Manager</h1>
       <BudgetTable items={budgets} />
     </div>

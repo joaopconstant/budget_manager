@@ -1,21 +1,43 @@
-import type { BudgetItem } from "@/types/budget"
+import type { BudgetItem } from "@/types/budget";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type Props = {
-  items: BudgetItem[]
-}
+  items: BudgetItem[];
+};
 
 export function BudgetTable({ items }: Props) {
-  if (items.length === 0) {
-    return <p>Nenhum dado encontrado</p>
-  }
-
   return (
-    <ul>
-      {items.map((item, index) => (
-        <li key={index}>
-          {item.title} | {item.category} | {item.date} | {item.value}
-        </li>
-      ))}
-    </ul>
-  )
+    <Table>
+      {items.length === 0 && (
+        <TableCaption>Nenhum dado encontrado</TableCaption>
+      )}
+      <TableHeader>
+        <TableRow>
+          <TableHead>Título</TableHead>
+          <TableHead>Categoria</TableHead>
+          <TableHead>Data</TableHead>
+          <TableHead className="text-right">Valor</TableHead>
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {items.map((item, index) => (
+          <TableRow key={index}>
+            <TableCell>{item.title}</TableCell>
+            <TableCell>{item.category}</TableCell>
+            <TableCell>{item.date}</TableCell>
+            <TableCell className="text-right">{item.value}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
 }
