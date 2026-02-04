@@ -1,7 +1,6 @@
 export type BudgetItem = {
-  UserID: string;
-  Title: string;
-  Category: string;
-  Date: string;
-  Value: number;
+  title: string;
+  category: string;
+  date: string;
+  value: number;
 };
