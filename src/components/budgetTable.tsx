@@ -1,4 +1,5 @@
 import type { BudgetItem } from "@/types/budget";
+import { formatCurrency, formatDate } from "@/lib/format";
 import {
   Table,
   TableBody,
@@ -8,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatCurrency, formatDate } from "@/lib/format";
 
 type Props = {
   items: BudgetItem[];

@@ -1,6 +1,6 @@
+import type { BudgetItem } from "@/types/budget";
 import { useEffect } from "react";
 import { getBudgetData, addBudgetItem } from "@/services/budgetService";
-import type { BudgetItem } from "@/types/budget";
 import { useState } from "react";
 import { BudgetTable } from "@/components/budgetTable";
 import { BudgetForm } from "@/components/budgetForm";

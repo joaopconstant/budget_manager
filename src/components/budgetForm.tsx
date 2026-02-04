@@ -1,3 +1,4 @@
+import type { BudgetItem } from "@/types/budget";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +11,7 @@ import {
 } from "@/components/ui/select";
 
 type Props = {
-  onAdd: (item: {
-    title: string;
-    category: string;
-    value: number;
-    date: string;
-  }) => Promise<void>;
+  onAdd: (item: Omit<BudgetItem, "id">) => Promise<void>;
 };
 
 export function BudgetForm({ onAdd }: Props) {
@@ -24,7 +20,7 @@ export function BudgetForm({ onAdd }: Props) {
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !category || !value) return;
 
@@ -48,7 +44,7 @@ export function BudgetForm({ onAdd }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
       <Input
         placeholder="Título"
         value={title}
@@ -76,7 +72,7 @@ export function BudgetForm({ onAdd }: Props) {
         onChange={(e) => setValue(e.target.value)}
         required
       />
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading} className="w-full md:w-auto">
         {loading ? "Adicionando..." : "Adicionar"}
       </Button>
     </form>
