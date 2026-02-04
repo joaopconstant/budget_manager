@@ -1,34 +1,63 @@
 import { useEffect } from "react";
-import { getBudgetData } from "@/services/budgetService";
+import { getBudgetData, addBudgetItem } from "@/services/budgetService";
 import type { BudgetItem } from "@/types/budget";
 import { useState } from "react";
 import { BudgetTable } from "@/components/budgetTable";
+import { BudgetForm } from "@/components/budgetForm";
 
 const USER_ID = "test";
 
 function App() {
   const [budgets, setBudgets] = useState<BudgetItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function load() {
+  const load = async () => {
+    try {
+      setLoading(true);
       const data = await getBudgetData();
-      const filteredData = data
+      const filteredData: BudgetItem[] = data
         .filter((item) => item.UserID === USER_ID)
-        .map((item) => ({
-          title: item.Title,
-          category: item.Category,
-          date: item.Date,
-          value: Number(item.Value),
+        .map((item, index) => ({
+          id: String(index),
+          title: item.Title || "Sem título",
+          category: item.Category || "Geral",
+          date: item.Date || new Date().toISOString(),
+          value: Number(item.Value) || 0,
         }));
       setBudgets(filteredData);
-      console.log(filteredData);
+    } catch (err) {
+      console.error(err);
+      setError("Não foi possível carregar os dados.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     load();
   }, []);
+
+  const handleAddItem = async (item: Omit<BudgetItem, "id">) => {
+    try {
+      await addBudgetItem({
+        UserID: USER_ID,
+        Title: item.title,
+        Category: item.category,
+        Value: item.value,
+        Date: item.date,
+      });
+      await load();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 
   return (
     <div className="flex min-h-svh flex-col p-20">
       <h1>Budget Manager</h1>
+      <BudgetForm onAdd={handleAddItem} />
       <BudgetTable items={budgets} />
     </div>
   );
