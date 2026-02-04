@@ -1,7 +1,10 @@
-import "./App.css";
 
 function App() {
-  return <h1>Budget Manager</h1>;
+  return (
+    <div className="flex min-h-svh flex-col">
+      <h1>Budget Manager</h1>
+    </div>
+  )
 }
 
-export default App;
+export default App
