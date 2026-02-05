@@ -30,7 +30,7 @@ export function BudgetForm({ onAdd }: Props) {
         title,
         category,
         value,
-        date: new Date().toISOString().split("T")[0],
+        date: new Date().toLocaleDateString("pt-BR"),
       });
       setTitle("");
       setCategory("");
