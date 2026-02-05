@@ -2,10 +2,11 @@ import type { BudgetItem } from "@/types/budget";
 import { useEffect, useMemo } from "react";
 import { getBudgetData, addBudgetItem } from "@/services/budgetService";
 import { useState } from "react";
-import { BudgetTable } from "@/components/budgetTable";
-import { BudgetForm } from "@/components/budgetForm";
-import { BudgetStats } from "./components/budgetStats";
-import { DateRangeFilter } from "./components/dateRageFilter";
+import { BudgetTable } from "@/components/BudgetTable";
+import { BudgetForm } from "@/components/BudgetForm";
+import { BudgetStats } from "@/components/BudgetStats";
+import { DateRangeFilter } from "@/components/DateRageFilter";
+import { CategoryPieChart } from "@/components/CategoryPieChart";
 
 const USER_ID = "test";
 
@@ -87,6 +88,7 @@ function App() {
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
       />
+      <CategoryPieChart items={filteredBudgets} />
       <BudgetStats items={filteredBudgets} />
       <BudgetForm onAdd={handleAddItem} />
       {!loading && <BudgetTable items={filteredBudgets} />}
