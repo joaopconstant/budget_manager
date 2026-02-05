@@ -17,10 +17,10 @@ type Props = {
 export function BudgetForm({ onAdd }: Props) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!title || !category || !value) return;
 
@@ -29,12 +29,12 @@ export function BudgetForm({ onAdd }: Props) {
       await onAdd({
         title,
         category,
-        value: Number(value),
+        value,
         date: new Date().toISOString().split("T")[0],
       });
       setTitle("");
       setCategory("");
-      setValue("");
+      setValue(0);
     } catch (error) {
       console.error(error);
       alert("Erro ao adicionar item");
@@ -51,7 +51,7 @@ export function BudgetForm({ onAdd }: Props) {
         onChange={(e) => setTitle(e.target.value)}
         required
       />
-      <Select value={category} onValueChange={setCategory} required>
+      <Select value={category} onValueChange={setCategory}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Categoria" />
         </SelectTrigger>
@@ -69,7 +69,7 @@ export function BudgetForm({ onAdd }: Props) {
         step="0.01"
         placeholder="Valor"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setValue(Number(e.target.value))}
         required
       />
       <Button type="submit" disabled={loading} className="w-full md:w-auto">

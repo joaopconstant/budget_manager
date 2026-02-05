@@ -58,7 +58,7 @@ function App() {
     <div className="flex min-h-svh flex-col p-20">
       <h1>Budget Manager</h1>
       <BudgetForm onAdd={handleAddItem} />
-      <BudgetTable items={budgets} />
+      {!loading && <BudgetTable items={budgets} />}
     </div>
   );
 }
