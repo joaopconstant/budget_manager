@@ -4,6 +4,7 @@ import { getBudgetData, addBudgetItem } from "@/services/budgetService";
 import { useState } from "react";
 import { BudgetTable } from "@/components/budgetTable";
 import { BudgetForm } from "@/components/budgetForm";
+import { BudgetStats } from "./components/budgetStats";
 
 const USER_ID = "test";
 
@@ -57,6 +58,7 @@ function App() {
   return (
     <div className="flex min-h-svh flex-col p-20">
       <h1>Budget Manager</h1>
+      <BudgetStats items={budgets} />
       <BudgetForm onAdd={handleAddItem} />
       {!loading && <BudgetTable items={budgets} />}
     </div>
