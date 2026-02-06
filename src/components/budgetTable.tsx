@@ -1,5 +1,7 @@
 import type { BudgetItem } from "@/types/budget";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { useEffect, useState } from "react";
+import { getBudgetData } from "@/services/budgetService";
 import {
   Table,
   TableBody,
@@ -11,10 +13,47 @@ import {
 } from "@/components/ui/table";
 
 type Props = {
-  items: BudgetItem[];
+  userId: string | null;
+  items?: BudgetItem[]; // Optional if we want to still support passing items
 };
 
-export function BudgetTable({ items }: Props) {
+export function BudgetTable({ userId }: Props) {
+  const [items, setItems] = useState<BudgetItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const load = async () => {
+      try {
+        setLoading(true);
+        const data = await getBudgetData();
+        const filteredData: BudgetItem[] = data
+          .filter((item) => item.UserID === userId)
+          .map((item, index) => ({
+            id: String(index),
+            title: item.Title || "Sem título",
+            category: item.Category || "Geral",
+            date: item.Date || new Date().toLocaleDateString("pt-BR"),
+            value: Number(item.Value) || 0,
+          }));
+        setItems(filteredData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [userId]);
+
+  if (!userId)
+    return (
+      <div className="p-4 text-center">Faça login para ver seu orçamento.</div>
+    );
+  if (loading) return <div className="p-4 text-center">Carregando...</div>;
+
   return (
     <Table>
       {items.length === 0 && (

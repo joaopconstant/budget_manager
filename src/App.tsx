@@ -7,12 +7,14 @@ import { BudgetForm } from "@/components/BudgetForm";
 import { BudgetStats } from "@/components/BudgetStats";
 import { DateRangeFilter } from "@/components/DateRageFilter";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
-
-const USER_ID = "test";
+import { useAuth } from "@/services/authService";
+import { Button } from "@/components/ui/button";
 
 function App() {
+  const { authenticateUser } = useAuth();
+  const [userId, setUserId] = useState<string | null>(null);
   const [budgets, setBudgets] = useState<BudgetItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(
@@ -38,11 +40,12 @@ function App() {
   }, [budgets, startDate, endDate]);
 
   const load = async () => {
+    if (!userId) return;
     try {
       setLoading(true);
       const data = await getBudgetData();
       const filteredData: BudgetItem[] = data
-        .filter((item) => item.UserID === USER_ID)
+        .filter((item) => item.UserID === userId)
         .map((item, index) => ({
           id: String(index),
           title: item.Title || "Sem título",
@@ -60,13 +63,16 @@ function App() {
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    if (userId) {
+      load();
+    }
+  }, [userId]);
 
   const handleAddItem = async (item: Omit<BudgetItem, "id">) => {
+    if (!userId) return;
     try {
       await addBudgetItem({
-        UserID: USER_ID,
+        UserID: userId,
         Title: item.title,
         Category: item.category,
         Value: item.value,
@@ -79,19 +85,53 @@ function App() {
     }
   };
 
+  const handleLogin = async () => {
+    try {
+      const id = await authenticateUser();
+      setUserId(id);
+    } catch (err) {
+      console.error("Auth failed", err);
+    }
+  };
+
   return (
-    <div className="flex min-h-svh flex-col p-20">
-      <h1>Budget Manager</h1>
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        onStartDateChange={setStartDate}
-        onEndDateChange={setEndDate}
-      />
-      <CategoryPieChart items={filteredBudgets} />
-      <BudgetStats items={filteredBudgets} />
-      <BudgetForm onAdd={handleAddItem} />
-      {!loading && <BudgetTable items={filteredBudgets} />}
+    <div className="flex min-h-svh flex-col p-20 gap-8">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Budget Manager</h1>
+        {!userId ? (
+          <Button onClick={handleLogin}>Entrar com Google</Button>
+        ) : (
+          <div className="text-sm text-muted-foreground">
+            Logado como: {userId}
+          </div>
+        )}
+      </div>
+
+      {!userId ? (
+        <div className="flex flex-col items-center justify-center py-20 border rounded-lg bg-slate-50">
+          <p className="mb-4">
+            Para gerenciar seu orçamento, você precisa se autenticar.
+          </p>
+          <Button size="lg" onClick={handleLogin}>
+            Fazer Login
+          </Button>
+        </div>
+      ) : (
+        <>
+          <DateRangeFilter
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <CategoryPieChart items={filteredBudgets} />
+            <BudgetStats items={filteredBudgets} />
+          </div>
+          <BudgetForm onAdd={handleAddItem} />
+          <BudgetTable userId={userId} />
+        </>
+      )}
     </div>
   );
 }
