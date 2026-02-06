@@ -8,7 +8,7 @@ type Props = {
 };
 
 export function BudgetStats({ items }: Props) {
-  const total = items.reduce((acc, item) => acc + item.value, 0);
+  const total = items.reduce((acc, item) => acc + item.Value, 0);
   const average = items.length > 0 ? total / items.length : 0;
 
   return (

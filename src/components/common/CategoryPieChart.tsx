@@ -30,7 +30,7 @@ export function CategoryPieChart({ items }: Props) {
   const dataMap = new Map<string, number>();
 
   items.forEach((item) => {
-    dataMap.set(item.category, (dataMap.get(item.category) ?? 0) + item.value);
+    dataMap.set(item.Category, (dataMap.get(item.Category) ?? 0) + item.Value);
   });
 
   const data: ChartData[] = Array.from(dataMap, ([name, value]) => ({
@@ -54,7 +54,7 @@ export function CategoryPieChart({ items }: Props) {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex-1 pb-0 min-h-[350px]">
+      <CardContent className="flex-1 pb-0 min-h-87.5">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

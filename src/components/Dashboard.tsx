@@ -1,6 +1,5 @@
 import type { BudgetItem } from "@/types/budget";
 import { useState, useEffect, useMemo } from "react";
-import { getBudgetData, addBudgetItem } from "@/services/budgetService";
 import { BudgetTable } from "@/components/common/BudgetTable";
 import { BudgetForm } from "@/components/common/BudgetForm";
 import { BudgetStats } from "@/components/common/BudgetStats";
@@ -9,6 +8,11 @@ import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
 import { Header } from "@/components/common/Header";
 import { Button } from "@/components/ui/button";
+import {
+  getBudgetData,
+  addBudgetItem,
+  removeBudgetItem,
+} from "@/services/budgetService";
 
 interface DashboardProps {
   userId: string;
@@ -25,7 +29,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
 
   const filteredBudgets = useMemo(() => {
     return budgets.filter((item) => {
-      let itemDate = item.date;
+      let itemDate = item.Date;
 
       // Convert DD/MM/YYYY to YYYY-MM-DD for comparison
       if (itemDate.includes("/")) {
@@ -46,12 +50,13 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
     try {
       setLoading(true);
       const data = await getBudgetData(userId);
-      const filteredData: BudgetItem[] = data.map((item, index) => ({
-        id: index,
-        title: item.Title || "Sem título",
-        category: item.Category || "Geral",
-        date: item.Date || new Date().toLocaleDateString("pt-BR"),
-        value: Number(item.Value) || 0,
+      const filteredData: BudgetItem[] = data.map((item) => ({
+        ItemID: item.ItemID || 0,
+        UserID: item.UserID,
+        Title: item.Title || "Sem título",
+        Category: item.Category || "Geral",
+        Date: item.Date || new Date().toLocaleDateString("pt-BR"),
+        Value: Number(item.Value) || 0,
       }));
       setBudgets(filteredData);
     } catch (err) {
@@ -65,19 +70,31 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
     load();
   }, [userId]);
 
-  const handleAddItem = async (item: Omit<BudgetItem, "id">) => {
+  const handleAddItem = async (item: Omit<BudgetItem, "ItemID" | "UserID">) => {
     try {
       await addBudgetItem({
+        ItemID: Math.floor(Math.random() * 10000000),
         UserID: userId,
-        Title: item.title,
-        Category: item.category,
-        Value: item.value,
-        Date: item.date,
+        Title: item.Title,
+        Category: item.Category,
+        Value: item.Value,
+        Date: item.Date,
       });
       await load();
     } catch (err) {
       console.error(err);
       throw err;
+    }
+  };
+
+  const handleRemoveItem = async (id: number) => {
+    try {
+      if (!id) return;
+      await removeBudgetItem(id.toString());
+      await load();
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao remover item");
     }
   };
 
@@ -140,7 +157,10 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
                 <div className="p-6 border-b bg-muted/20">
                   <BudgetForm onAdd={handleAddItem} />
                 </div>
-                <BudgetTable userId={userId} />
+                <BudgetTable
+                  items={filteredBudgets}
+                  onDelete={handleRemoveItem}
+                />
               </div>
             </div>
           </div>

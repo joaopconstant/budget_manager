@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 
 type Props = {
-  onAdd: (item: Omit<BudgetItem, "id">) => Promise<void>;
+  onAdd: (item: Omit<BudgetItem, "ItemID" | "UserID">) => Promise<void>;
 };
 
 export function BudgetForm({ onAdd }: Props) {
@@ -28,10 +28,10 @@ export function BudgetForm({ onAdd }: Props) {
     setLoading(true);
     try {
       await onAdd({
-        title,
-        category,
-        value,
-        date: new Date().toLocaleDateString("pt-BR"),
+        Title: title,
+        Category: category,
+        Value: value,
+        Date: new Date().toLocaleDateString("pt-BR"),
       });
       setTitle("");
       setCategory("");

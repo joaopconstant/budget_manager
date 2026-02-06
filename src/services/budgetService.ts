@@ -1,15 +1,8 @@
+import type { BudgetItem } from "@/types/budget";
+
 const API_URL = import.meta.env.VITE_SHEETS_API_URL as string;
 
-export type APIBudgetItem = {
-  UserID: string;
-  Title: string;
-  Category: string;
-  Date: string;
-  Value: number | string;
-};
-
-export async function getBudgetData(userId: string): Promise<APIBudgetItem[]> {
-  // Nota: certifique-se que o nome da coluna na sua planilha é exatamente "UserID"
+export async function getBudgetData(userId: string): Promise<BudgetItem[]> {
   const url = `${API_URL}?UserID=${encodeURIComponent(userId)}`;
   const response = await fetch(url);
 
@@ -21,7 +14,7 @@ export async function getBudgetData(userId: string): Promise<APIBudgetItem[]> {
   return data;
 }
 
-export async function addBudgetItem(item: APIBudgetItem) {
+export async function addBudgetItem(item: BudgetItem) {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
@@ -35,4 +28,16 @@ export async function addBudgetItem(item: APIBudgetItem) {
   }
 
   return response.json();
+}
+
+export async function removeBudgetItem(id: string) {
+  const response = await fetch(`${API_URL}?ItemID=${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao remover item do Sheets");
+  }
+
+  return response.text();
 }
