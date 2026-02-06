@@ -7,6 +7,7 @@ import { BudgetStats } from "@/components/common/BudgetStats";
 import { DateRangeFilter } from "@/components/common/DateRageFilter";
 import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
+import { Header } from "@/components/common/Header";
 
 interface DashboardProps {
   userId: string;
@@ -79,13 +80,12 @@ export function Dashboard({ userId }: DashboardProps) {
   };
 
   return (
-    <div className="flex min-h-svh flex-col p-20 gap-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Budget Manager</h1>
+    <div className="flex min-h-svh flex-col p-20">
+      <Header>
         <div className="text-sm text-muted-foreground">
           Logado como: {userId}
         </div>
-      </div>
+      </Header>
 
       <DateRangeFilter
         startDate={startDate}
@@ -95,7 +95,7 @@ export function Dashboard({ userId }: DashboardProps) {
       />
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-3 border rounded-xl bg-slate-50/50">
+        <div className="flex flex-col items-center justify-center py-12 gap-3 border rounded-xl bg-card/50">
           <Spinner className="size-10 text-primary" />
           <p className="text-sm text-muted-foreground animate-pulse font-medium">
             Carregando painel...

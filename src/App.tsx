@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/services/authService";
 import { LoginScreen } from "@/components/LoginScreen";
 import { Dashboard } from "@/components/Dashboard";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
   const { authenticateUser } = useAuth();
@@ -16,11 +17,15 @@ function App() {
     }
   };
 
-  if (!userId) {
-    return <LoginScreen onLogin={handleLogin} />;
-  }
-
-  return <Dashboard userId={userId} />;
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      {!userId ? (
+        <LoginScreen onLogin={handleLogin} />
+      ) : (
+        <Dashboard userId={userId} />
+      )}
+    </ThemeProvider>
+  );
 }
 
 export default App;
