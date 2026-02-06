@@ -2,6 +2,7 @@ import type { BudgetItem } from "@/types/budget";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
   SelectContent,
@@ -72,8 +73,19 @@ export function BudgetForm({ onAdd }: Props) {
         onChange={(e) => setValue(Number(e.target.value))}
         required
       />
-      <Button type="submit" disabled={loading} className="w-full md:w-auto">
-        {loading ? "Adicionando..." : "Adicionar"}
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full md:w-auto flex items-center gap-2"
+      >
+        {loading ? (
+          <>
+            <Spinner className="size-4 animate-spin text-current" />
+            <span>Adicionando...</span>
+          </>
+        ) : (
+          "Adicionar"
+        )}
       </Button>
     </form>
   );

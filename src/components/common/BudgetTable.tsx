@@ -2,6 +2,7 @@ import type { BudgetItem } from "@/types/budget";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { useEffect, useState } from "react";
 import { getBudgetData } from "@/services/budgetService";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -52,7 +53,15 @@ export function BudgetTable({ userId }: Props) {
     return (
       <div className="p-4 text-center">Faça login para ver seu orçamento.</div>
     );
-  if (loading) return <div className="p-4 text-center">Carregando...</div>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-center p-8 gap-2">
+        <Spinner className="size-8 text-primary" />
+        <p className="text-sm text-muted-foreground animate-pulse">
+          Carregando orçamento...
+        </p>
+      </div>
+    );
 
   return (
     <Table>
