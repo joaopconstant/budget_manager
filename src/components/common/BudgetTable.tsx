@@ -21,7 +21,7 @@ export function BudgetTable({ items, onDelete }: Props) {
   return (
     <Table>
       {items.length === 0 && (
-        <TableCaption>Nenhum dado encontrado</TableCaption>
+        <TableCaption className="mb-4">Nenhum dado encontrado</TableCaption>
       )}
       <TableHeader>
         <TableRow>

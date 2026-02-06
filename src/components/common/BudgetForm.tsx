@@ -18,7 +18,7 @@ type Props = {
 export function BudgetForm({ onAdd }: Props) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -35,7 +35,7 @@ export function BudgetForm({ onAdd }: Props) {
       });
       setTitle("");
       setCategory("");
-      setValue(0);
+      setValue(undefined);
     } catch (error) {
       console.error(error);
       alert("Erro ao adicionar item");
@@ -66,11 +66,20 @@ export function BudgetForm({ onAdd }: Props) {
         </SelectContent>
       </Select>
       <Input
-        type="number"
-        step="0.01"
+        type="text"
         placeholder="Valor"
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
+        value={
+          value !== undefined
+            ? new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(value)
+            : ""
+        }
+        onChange={(e) => {
+          const numericValue = Number(e.target.value.replace(/\D/g, "")) / 100;
+          setValue(numericValue);
+        }}
         required
       />
       <Button
