@@ -7,7 +7,7 @@ export async function getBudgetData(userId: string): Promise<BudgetItem[]> {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar dados do Sheets");
+    throw new Error("Error fetching data from Sheets");
   }
 
   const data = await response.json();
@@ -24,7 +24,7 @@ export async function addBudgetItem(item: BudgetItem) {
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao adicionar item ao Sheets");
+    throw new Error("Error adding item to Sheets");
   }
 
   return response.json();
@@ -36,7 +36,7 @@ export async function removeBudgetItem(id: string) {
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao remover item do Sheets");
+    throw new Error("Error removing item from Sheets");
   }
 
   return response.text();

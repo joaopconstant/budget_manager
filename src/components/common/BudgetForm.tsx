@@ -31,14 +31,14 @@ export function BudgetForm({ onAdd }: Props) {
         Title: title,
         Category: category,
         Value: value,
-        Date: new Date().toLocaleDateString("pt-BR"),
+        Date: new Date().toLocaleDateString("en-US"),
       });
       setTitle("");
       setCategory("");
       setValue(undefined);
     } catch (error) {
       console.error(error);
-      alert("Erro ao adicionar item");
+      alert("Error adding item");
     } finally {
       setLoading(false);
     }
@@ -47,32 +47,32 @@ export function BudgetForm({ onAdd }: Props) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
       <Input
-        placeholder="Título"
+        placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
       />
       <Select value={category} onValueChange={setCategory}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Categoria" />
+          <SelectValue placeholder="Category" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Moradia">Moradia</SelectItem>
-          <SelectItem value="Alimentação">Alimentação</SelectItem>
-          <SelectItem value="Transporte">Transporte</SelectItem>
-          <SelectItem value="Lazer">Lazer</SelectItem>
-          <SelectItem value="Saúde">Saúde</SelectItem>
-          <SelectItem value="Outros">Outros</SelectItem>
+          <SelectItem value="Housing">Housing</SelectItem>
+          <SelectItem value="Food">Food</SelectItem>
+          <SelectItem value="Transport">Transport</SelectItem>
+          <SelectItem value="Leisure">Leisure</SelectItem>
+          <SelectItem value="Health">Health</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
         </SelectContent>
       </Select>
       <Input
         type="text"
-        placeholder="Valor"
+        placeholder="Value"
         value={
           value !== undefined
-            ? new Intl.NumberFormat("pt-BR", {
+            ? new Intl.NumberFormat("en-US", {
                 style: "currency",
-                currency: "BRL",
+                currency: "USD",
               }).format(value)
             : ""
         }
@@ -90,10 +90,10 @@ export function BudgetForm({ onAdd }: Props) {
         {loading ? (
           <>
             <Spinner className="size-4 animate-spin text-current" />
-            <span>Adicionando...</span>
+            <span>Adding...</span>
           </>
         ) : (
-          "Adicionar"
+          "Add"
         )}
       </Button>
     </form>

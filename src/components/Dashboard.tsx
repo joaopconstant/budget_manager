@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { BudgetTable } from "@/components/common/BudgetTable";
 import { BudgetForm } from "@/components/common/BudgetForm";
 import { BudgetStats } from "@/components/common/BudgetStats";
-import { DateRangeFilter } from "@/components/common/DateRageFilter";
+import { DateRangeFilter } from "@/components/common/DateRangeFilter";
 import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
 import { Header } from "@/components/common/Header";
@@ -53,9 +53,9 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
       const filteredData: BudgetItem[] = data.map((item) => ({
         ItemID: item.ItemID || 0,
         UserID: item.UserID,
-        Title: item.Title || "Sem título",
-        Category: item.Category || "Geral",
-        Date: item.Date || new Date().toLocaleDateString("pt-BR"),
+        Title: item.Title || "No title",
+        Category: item.Category || "General",
+        Date: item.Date || new Date().toLocaleDateString("en-US"),
         Value: Number(item.Value) || 0,
       }));
       setBudgets(filteredData);
@@ -94,7 +94,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
       await load();
     } catch (err) {
       console.error(err);
-      alert("Erro ao remover item");
+      alert("Error removing item");
     }
   };
 
@@ -108,7 +108,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
             onClick={onLogout}
             className="text-muted-foreground hover:text-foreground"
           >
-            Sair
+            Logout
           </Button>
         </div>
       </Header>
@@ -116,9 +116,9 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pb-10 space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Visão Geral</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
             <p className="text-muted-foreground">
-              Acompanhe seus gastos e estatísticas.
+              Track your expenses and statistics.
             </p>
           </div>
           <DateRangeFilter
@@ -133,7 +133,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
           <div className="flex flex-col items-center justify-center py-20 gap-3 border border-dashed rounded-xl bg-card/50">
             <Spinner className="size-10 text-primary animate-spin" />
             <p className="text-sm text-muted-foreground animate-pulse font-medium">
-              Atualizando dados...
+              Updating data...
             </p>
           </div>
         ) : (
@@ -150,7 +150,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
             <div className="grid gap-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold tracking-tight">
-                  Lançamentos
+                  Transactions
                 </h3>
               </div>
               <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">

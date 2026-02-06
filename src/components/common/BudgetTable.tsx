@@ -21,14 +21,14 @@ export function BudgetTable({ items, onDelete }: Props) {
   return (
     <Table>
       {items.length === 0 && (
-        <TableCaption className="mb-4">Nenhum dado encontrado</TableCaption>
+        <TableCaption className="mb-4">No data found</TableCaption>
       )}
       <TableHeader>
         <TableRow>
-          <TableHead>Título</TableHead>
-          <TableHead>Categoria</TableHead>
-          <TableHead>Data</TableHead>
-          <TableHead className="text-right">Valor</TableHead>
+          <TableHead>Title</TableHead>
+          <TableHead>Category</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead className="text-right">Value</TableHead>
           <TableHead className="w-12.5"></TableHead>
         </TableRow>
       </TableHeader>
@@ -56,10 +56,10 @@ export function BudgetTable({ items, onDelete }: Props) {
                 size="icon"
                 className="h-8 w-8 text-muted-foreground hover:text-destructive transition-colors"
                 onClick={() => onDelete(item.ItemID!)}
-                title="Remover item"
+                title="Remove item"
               >
                 <Trash2 className="h-4 w-4" />
-                <span className="sr-only">Remover</span>
+                <span className="sr-only">Remove</span>
               </Button>
             </TableCell>
           </TableRow>

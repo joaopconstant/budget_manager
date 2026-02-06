@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/services/authService";
-import { LoginScreen } from "@/components/LoginScreen";
+import { LandingPage } from "@/components/LandingPage";
 import { Dashboard } from "@/components/Dashboard";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
@@ -28,7 +28,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       {!userId ? (
-        <LoginScreen onLogin={handleLogin} />
+        <LandingPage onLogin={handleLogin} />
       ) : (
         <Dashboard userId={userId} onLogout={handleLogout} />
       )}

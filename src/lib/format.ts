@@ -1,7 +1,7 @@
 export function formatCurrency(value: number) {
-  return value.toLocaleString("pt-BR", {
+  return value.toLocaleString("en-US", {
     style: "currency",
-    currency: "BRL",
+    currency: "USD",
   });
 }
 
@@ -13,5 +13,5 @@ export function formatDate(date: string) {
     }
   }
   const d = new Date(date);
-  return isNaN(d.getTime()) ? date : new Intl.DateTimeFormat("pt-BR").format(d);
+  return isNaN(d.getTime()) ? date : new Intl.DateTimeFormat("en-US").format(d);
 }

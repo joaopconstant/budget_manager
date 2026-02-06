@@ -8,6 +8,7 @@ import {
   Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/format";
 
 type Props = {
   items: BudgetItem[];
@@ -41,7 +42,7 @@ export function CategoryPieChart({ items }: Props) {
   if (data.length === 0) {
     return (
       <Card className="h-full shadow-sm flex flex-col items-center justify-center p-6 text-center text-muted-foreground bg-muted/20 border-border/50">
-        <p>Nenhum dado para o período</p>
+        <p>No data for the period</p>
       </Card>
     );
   }
@@ -50,7 +51,7 @@ export function CategoryPieChart({ items }: Props) {
     <Card className="h-full shadow-sm flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle className="text-base font-medium">
-          Gastos por Categoria
+          Transactions by Category
         </CardTitle>
       </CardHeader>
 
@@ -90,7 +91,7 @@ export function CategoryPieChart({ items }: Props) {
                             {data.name}
                           </span>
                           <span className="font-bold text-sm">
-                            R$ {Number(data.value).toFixed(2)}
+                            {formatCurrency(Number(data.value))}
                           </span>
                         </div>
                       </div>
