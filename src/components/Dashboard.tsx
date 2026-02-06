@@ -8,12 +8,14 @@ import { DateRangeFilter } from "@/components/common/DateRageFilter";
 import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
 import { Header } from "@/components/common/Header";
+import { Button } from "@/components/ui/button";
 
 interface DashboardProps {
   userId: string;
+  onLogout: () => void;
 }
 
-export function Dashboard({ userId }: DashboardProps) {
+export function Dashboard({ userId, onLogout }: DashboardProps) {
   const [budgets, setBudgets] = useState<BudgetItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -82,8 +84,13 @@ export function Dashboard({ userId }: DashboardProps) {
   return (
     <div className="flex min-h-svh flex-col p-20">
       <Header>
-        <div className="text-sm text-muted-foreground">
-          Logado como: {userId}
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-muted-foreground hidden md:block">
+            Logado como: {userId}
+          </div>
+          <Button variant="ghost" size="sm" onClick={onLogout}>
+            Sair
+          </Button>
         </div>
       </Header>
 

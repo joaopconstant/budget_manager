@@ -6,15 +6,23 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
   const { authenticateUser } = useAuth();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(() =>
+    localStorage.getItem("budget_user_id"),
+  );
 
   const handleLogin = async () => {
     try {
       const id = await authenticateUser();
+      localStorage.setItem("budget_user_id", id);
       setUserId(id);
     } catch (err) {
       console.error("Auth failed", err);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("budget_user_id");
+    setUserId(null);
   };
 
   return (
@@ -22,7 +30,7 @@ function App() {
       {!userId ? (
         <LoginScreen onLogin={handleLogin} />
       ) : (
-        <Dashboard userId={userId} />
+        <Dashboard userId={userId} onLogout={handleLogout} />
       )}
     </ThemeProvider>
   );
