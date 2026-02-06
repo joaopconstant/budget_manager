@@ -35,7 +35,7 @@ export function BudgetTable({ items, onDelete }: Props) {
 
       <TableBody>
         {items.map((item, index) => (
-          <TableRow key={index} className="hover:bg-muted/50 transition-colors">
+          <TableRow key={index} className="hover:bg-muted/50 transition-colors h-15">
             <TableCell className="font-medium text-foreground">
               {item.Title}
             </TableCell>
