@@ -82,42 +82,70 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
   };
 
   return (
-    <div className="flex min-h-svh flex-col p-20">
+    <div className="min-h-svh bg-background font-sans antialiased">
       <Header>
         <div className="flex items-center gap-4">
-          <div className="text-sm text-muted-foreground hidden md:block">
-            Logado como: {userId}
-          </div>
-          <Button variant="ghost" size="sm" onClick={onLogout}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onLogout}
+            className="text-muted-foreground hover:text-foreground"
+          >
             Sair
           </Button>
         </div>
       </Header>
 
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        onStartDateChange={setStartDate}
-        onEndDateChange={setEndDate}
-      />
-
-      {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-3 border rounded-xl bg-card/50">
-          <Spinner className="size-10 text-primary" />
-          <p className="text-sm text-muted-foreground animate-pulse font-medium">
-            Carregando painel...
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <CategoryPieChart items={filteredBudgets} />
-            <BudgetStats items={filteredBudgets} />
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 pb-10 space-y-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Visão Geral</h2>
+            <p className="text-muted-foreground">
+              Acompanhe seus gastos e estatísticas.
+            </p>
           </div>
-          <BudgetForm onAdd={handleAddItem} />
-          <BudgetTable userId={userId} />
-        </>
-      )}
+          <DateRangeFilter
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+          />
+        </div>
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-3 border border-dashed rounded-xl bg-card/50">
+            <Spinner className="size-10 text-primary animate-spin" />
+            <p className="text-sm text-muted-foreground animate-pulse font-medium">
+              Atualizando dados...
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-8 animate-in fade-in-50 duration-500 slide-in-from-bottom-5">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <div className="lg:col-span-4">
+                <CategoryPieChart items={filteredBudgets} />
+              </div>
+              <div className="lg:col-span-3">
+                <BudgetStats items={filteredBudgets} />
+              </div>
+            </div>
+
+            <div className="grid gap-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  Lançamentos
+                </h3>
+              </div>
+              <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+                <div className="p-6 border-b bg-muted/20">
+                  <BudgetForm onAdd={handleAddItem} />
+                </div>
+                <BudgetTable userId={userId} />
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -77,11 +77,19 @@ export function BudgetTable({ userId }: Props) {
 
       <TableBody>
         {items.map((item, index) => (
-          <TableRow key={index}>
-            <TableCell>{item.title}</TableCell>
-            <TableCell>{item.category}</TableCell>
-            <TableCell>{formatDate(item.date)}</TableCell>
-            <TableCell className="text-right">
+          <TableRow key={index} className="hover:bg-muted/50 transition-colors">
+            <TableCell className="font-medium text-foreground">
+              {item.title}
+            </TableCell>
+            <TableCell>
+              <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                {item.category}
+              </span>
+            </TableCell>
+            <TableCell className="text-muted-foreground">
+              {formatDate(item.date)}
+            </TableCell>
+            <TableCell className="text-right font-medium">
               {formatCurrency(item.value)}
             </TableCell>
           </TableRow>
