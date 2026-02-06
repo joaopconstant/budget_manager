@@ -1,15 +1,16 @@
 const API_URL = import.meta.env.VITE_SHEETS_API_URL as string;
 
 export type APIBudgetItem = {
-  UserID: string;
+  UserID: number;
   Title: string;
   Category: string;
   Date: string;
   Value: number | string;
 };
 
-export async function getBudgetData(): Promise<APIBudgetItem[]> {
-  const response = await fetch(API_URL);
+export async function getBudgetData(userId: number): Promise<APIBudgetItem[]> {
+  const url = `${API_URL}?UserID=${userId}`;
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error("Erro ao buscar dados do Sheets");

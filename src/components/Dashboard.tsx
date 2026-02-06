@@ -9,7 +9,7 @@ import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
 
 interface DashboardProps {
-  userId: string;
+  userId: number;
 }
 
 export function Dashboard({ userId }: DashboardProps) {
@@ -42,16 +42,14 @@ export function Dashboard({ userId }: DashboardProps) {
     if (!userId) return;
     try {
       setLoading(true);
-      const data = await getBudgetData();
-      const filteredData: BudgetItem[] = data
-        .filter((item) => item.UserID === userId)
-        .map((item, index) => ({
-          id: String(index),
-          title: item.Title || "Sem título",
-          category: item.Category || "Geral",
-          date: item.Date || new Date().toLocaleDateString("pt-BR"),
-          value: Number(item.Value) || 0,
-        }));
+      const data = await getBudgetData(userId);
+      const filteredData: BudgetItem[] = data.map((item, index) => ({
+        id: index,
+        title: item.Title || "Sem título",
+        category: item.Category || "Geral",
+        date: item.Date || new Date().toLocaleDateString("pt-BR"),
+        value: Number(item.Value) || 0,
+      }));
       setBudgets(filteredData);
     } catch (err) {
       console.error(err);
