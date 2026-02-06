@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 
 type Props = {
-  userId: number | null;
+  userId: string | null;
   items?: BudgetItem[]; // Optional if we want to still support passing items
 };
 

@@ -5,12 +5,12 @@ import { Dashboard } from "@/components/Dashboard";
 
 function App() {
   const { authenticateUser } = useAuth();
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const handleLogin = async () => {
     try {
       const id = await authenticateUser();
-      setUserId(Number(id));
+      setUserId(id);
     } catch (err) {
       console.error("Auth failed", err);
     }

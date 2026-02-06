@@ -9,7 +9,7 @@ import { CategoryPieChart } from "@/components/common/CategoryPieChart";
 import { Spinner } from "@/components/ui/spinner";
 
 interface DashboardProps {
-  userId: number;
+  userId: string;
 }
 
 export function Dashboard({ userId }: DashboardProps) {

@@ -1,15 +1,16 @@
 const API_URL = import.meta.env.VITE_SHEETS_API_URL as string;
 
 export type APIBudgetItem = {
-  UserID: number;
+  UserID: string;
   Title: string;
   Category: string;
   Date: string;
   Value: number | string;
 };
 
-export async function getBudgetData(userId: number): Promise<APIBudgetItem[]> {
-  const url = `${API_URL}?UserID=${userId}`;
+export async function getBudgetData(userId: string): Promise<APIBudgetItem[]> {
+  // Nota: certifique-se que o nome da coluna na sua planilha é exatamente "UserID"
+  const url = `${API_URL}?UserID=${encodeURIComponent(userId)}`;
   const response = await fetch(url);
 
   if (!response.ok) {
