@@ -1,79 +1,166 @@
 # Budget Manager
 
-A personal finance management application designed for seamless budget tracking and data visualization. This project serves as a demonstration of modern frontend development practices, emphasizing clean architecture, type safety, and efficient data handling.
+A personal finance dashboard built to demonstrate modern frontend architecture, clean state management, and real-world API integration.  
+This project focuses on clarity, maintainability, and correct data flow rather than production-scale complexity.
 
-## Purpose
+---
 
-This application allows users to manage their personal finances by tracking income and expenses. It features a secure authentication flow, real-time data persistence, and a responsive dashboard that provides actionable insights into spending habits.
+## Overview
+
+Budget Manager is a web application that allows users to track expenses, visualize spending by category, and filter data by date range.  
+It was designed as a portfolio project to showcase solid frontend engineering practices, pragmatic technical decisions, and a clear separation of concerns.
+
+The application uses Google OAuth for user identity, a lightweight external API for persistence, and a responsive dashboard built with reusable UI components.
+
+---
 
 ## Key Features
 
-- **Secure Authentication**: Integrated Google OAuth for a seamless and secure user login experience.
-- **Dynamic Dashboard**: Real-time data visualization of financial status, including total balance, income, and expenses.
-- **Comprehensive CRUD Operations**: Fully functional interface for creating, reading, and deleting budget entries.
-- **Cloud Persistence**: Leveraging Google Sheets as a easy and powerful, accessible backend for data storage.
-- **Responsive Design**: A mobile-first approach ensuring a high-quality experience across all devices.
+- **Google OAuth Authentication**
+  - User identity handled via Google OAuth.
+  - Each user is associated with their own dataset using a unique identifier.
 
-## Technical Decisions and Justification
+- **Interactive Dashboard**
+  - Expense summary with total values.
+  - Category-based aggregation.
+  - Responsive pie chart visualization.
 
-The choice of technologies for this project was driven by the goal of creating a scalable, maintainable, and high-performance application.
+- **Date Range Filtering**
+  - Global date range filter.
+  - All dashboard components react automatically to the selected period.
+
+- **CRUD Operations**
+  - Add and remove budget entries.
+  - Data updates are reflected immediately in the UI.
+
+- **Cloud Data Persistence**
+  - Budget data stored in Google Sheets.
+  - Sheets exposed as a REST API using Sheets2API.
+
+- **Responsive UI**
+  - Mobile-first layout.
+  - Consistent design system using shadcn/ui and Tailwind CSS.
+
+---
+
+## Technical Decisions and Rationale
+
+This project prioritizes explicit architectural decisions and simplicity over unnecessary abstraction.
 
 ### TypeScript
 
-TypeScript was chosen as the primary language to ensure robust type safety across the application. By defining clear interfaces for data structures and service responses, the codebase remains predictable and easier to refactor, which is critical for long-term maintenance in professional environments.
+TypeScript is used across the entire codebase to enforce type safety and predictable data handling.  
+All domain entities and service responses are explicitly typed, reducing runtime errors and improving refactorability.
+
+---
 
 ### Vite
 
-Vite is utilized as the build tool and development server. Its lightning-fast Hot Module Replacement (HMR) and optimized build process significantly improve developer productivity and application performance compared to traditional bundlers.
+Vite is used as the build tool and dev server to provide:
+- Fast startup times
+- Efficient Hot Module Replacement
+- Optimized production builds
 
-### Shadcn UI and Tailwind CSS
+This improves developer experience without adding configuration overhead.
 
-The UI is built using Shadcn UI components, styled with Tailwind CSS. This combination allows for:
+---
 
-- **Accessibility**: Shadcn components are built on top of Radix UI, ensuring high standards of accessibility (WAI-ARIA).
-- **Customizability**: Tailwind CSS provides the flexibility to create a unique and premium aesthetic without the constraints of a rigid CSS-in-JS library.
-- **Performance**: Tailwind's utility-first approach results in smaller CSS bundles and faster rendering.
+### shadcn/ui and Tailwind CSS
 
-### Sheets2API
+The UI layer is built with shadcn/ui components styled using Tailwind CSS.
 
-Sheets2API is used to transform Google Sheets into a functional REST API. This decision demonstrates:
+This combination provides:
+- Accessible components built on Radix UI primitives
+- A consistent and scalable design system
+- Minimal CSS overhead and predictable styling
 
-- **Resourcefulness**: Utilizing existing tools to create a backend solution without the overhead of managing a dedicated server or database for this specific use case.
-- **API Integration**: Mastery of handling complex external API integrations, including proper error handling and data transformation.
+UI components are treated strictly as presentation, with no business logic embedded.
+
+---
+
+### Google Sheets + Sheets2API
+
+Google Sheets is used as a lightweight persistence layer, exposed via Sheets2API.
+
+This decision demonstrates:
+- Practical API integration skills
+- Data normalization and transformation on the frontend
+- A pragmatic approach for demos and internal tools
+
+This is not intended as a production-ready backend, but as a clear and understandable data source for a portfolio project.
+
+---
 
 ### Google OAuth
 
-Implementing Google OAuth via `@react-oauth/google` showcases proficiency in handling modern authentication protocols. It ensures that user identity is managed securely through a trusted provider, reducing the security risks associated with custom authentication systems.
+Google OAuth is used to handle user identity via a trusted external provider.
+
+Important notes:
+- OAuth is used for authentication, not for securing the data storage layer.
+- The Sheets API remains publicly accessible for demo purposes.
+- User identity is used to segment and filter data client-side.
+
+This tradeoff is intentional and documented.
+
+---
+
+## Data Flow Overview
+
+1. The user authenticates via Google OAuth.
+2. A unique user identifier is extracted from the OAuth token.
+3. Budget entries are associated with this user identifier.
+4. Data is fetched from Google Sheets through Sheets2API.
+5. The frontend filters, aggregates, and visualizes data based on user and date range.
+
+All state derivation happens in the frontend, ensuring predictable data flow.
+
+---
 
 ## Project Structure
 
-The project follows a modular architecture to separate concerns and improve readability:
+The codebase follows a modular and scalable structure:
 
-- **src/components**: Organized into UI primitives and complex feature components (Dashboard, Forms).
-- **src/services**: Encapsulates all API logic and authentication flows, keeping components lean and focused on presentation.
-- **src/types**: Centralized type definitions to ensure consistency across the application.
-- **src/lib**: Utility functions and shared configurations (e.g., Tailwind merge, API clients).
+- `src/components`  
+  Reusable UI components and feature-level components such as forms, tables, and charts.
+
+- `src/services`  
+  API interaction and external service logic.
+
+- `src/hooks`  
+  Custom hooks for user state and shared logic.
+
+- `src/types`  
+  Centralized domain and data model definitions.
+
+- `src/lib`  
+  Shared utilities and configuration helpers.
+
+This separation keeps components focused and easy to reason about.
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (Latest LTS version recommended)
-- npm or yarn
+- Node.js (LTS recommended)
+- pnpm
+
+---
 
 ### Installation
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/joaopconstant/budget_manager.git
-   ```
+```bash
+git clone https://github.com/joaopconstant/budget_manager.git
+```
 
 2. Install dependencies:
 
-   ```bash
-   pnpm install
-   ```
+```bash
+pnpm install
+```
 
 3. Configure environment variables:
    Create a `.env` file in the root directory and add the following:
@@ -88,8 +175,36 @@ The project follows a modular architecture to separate concerns and improve read
    pnpm run dev
    ```
 
-## TODO
+---
 
-- [ ] Add support for currency selection (USD, BRL, EUR, etc.)
-- [ ] Add support for date formatting selection
-- [ ] Add category input
+### Limitations
+
+This project intentionally accepts the following limitations:
+
+- Google Sheets is used as a public demo backend without row-level authorization.
+- OAuth provides user identity but does not secure the storage layer.
+- No server-side validation or access control is implemented.
+- Not intended for storing real or sensitive financial data.
+
+These tradeoffs are documented to maintain transparency and technical honesty.
+
+---
+
+### Future Improvements
+
+- Edit existing budget entries
+- Currency selection and formatting preferences
+- Replace Sheets2API with a dedicated backend
+- Role-based access control
+- Persist user dashboard preferences
+
+---
+
+### This project is designed to demonstrate:
+
+- Clean frontend architecture
+- Correct state derivation
+- Thoughtful technical tradeoffs
+- Ability to integrate external services responsibly
+
+It prioritizes clarity and correctness over unnecessary complexity.
