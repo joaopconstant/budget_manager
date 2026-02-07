@@ -1,4 +1,7 @@
 import type { BudgetItem } from "@/types/budget";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/format";
+import { groupByCategory } from "@/lib/budgetUtils";
 import {
   PieChart,
   Pie,
@@ -7,8 +10,6 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/format";
 
 type Props = {
   items: BudgetItem[];
@@ -28,13 +29,9 @@ const COLORS = [
 ];
 
 export function CategoryPieChart({ items }: Props) {
-  const dataMap = new Map<string, number>();
+  const categoryMap = groupByCategory(items);
 
-  items.forEach((item) => {
-    dataMap.set(item.Category, (dataMap.get(item.Category) ?? 0) + item.Value);
-  });
-
-  const data: ChartData[] = Array.from(dataMap, ([name, value]) => ({
+  const data: ChartData[] = Array.from(categoryMap, ([name, value]) => ({
     name,
     value,
   })).sort((a, b) => b.value - a.value);

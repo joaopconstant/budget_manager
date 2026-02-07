@@ -1,5 +1,4 @@
-import type { BudgetItem } from "@/types/budget";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useEffect } from "react";
 import { BudgetTable } from "@/components/common/BudgetTable";
 import { BudgetForm } from "@/components/common/BudgetForm";
 import { BudgetStats } from "@/components/common/BudgetStats";
@@ -9,11 +8,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { Header } from "@/components/common/Header";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import {
-  getBudgetData,
-  addBudgetItem,
-  removeBudgetItem,
-} from "@/services/budgetService";
+import { useBudgetData } from "@/hooks/useBudgetData";
+import { useBudgetFilter } from "@/hooks/useBudgetFilter";
 
 interface DashboardProps {
   userId: string;
@@ -21,84 +17,15 @@ interface DashboardProps {
 }
 
 export function Dashboard({ userId, onLogout }: DashboardProps) {
-  const [budgets, setBudgets] = useState<BudgetItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(
-    new Date().toISOString().split("T")[0],
-  );
+  const { budgets, loading, loadBudgets, addItem, removeItem } =
+    useBudgetData(userId);
 
-  const parseDate = (dateStr: string): string => {
-    if (dateStr.includes("/")) {
-      const [d, m, y] = dateStr.split("/");
-      return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
-    }
-    return dateStr.split("T")[0];
-  };
-
-  const filteredBudgets = useMemo(() => {
-    return budgets.filter((item) => {
-      const itemDate = parseDate(item.Date);
-      if (startDate && itemDate < startDate) return false;
-      if (endDate && itemDate > endDate) return false;
-      return true;
-    });
-  }, [budgets, startDate, endDate]);
-
-  const load = useCallback(async () => {
-    if (!userId) return;
-    try {
-      setLoading(true);
-      const data = await getBudgetData(userId);
-      const normalizedData: BudgetItem[] = data.map((item) => ({
-        ItemID: item.ItemID || 0,
-        UserID: item.UserID,
-        Title: item.Title || "No title",
-        Category: item.Category || "General",
-        Date: item.Date || new Date().toISOString(),
-        Value: Number(item.Value) || 0,
-      }));
-      setBudgets(
-        normalizedData.sort(
-          (a, b) =>
-            new Date(parseDate(b.Date)).getTime() -
-            new Date(parseDate(a.Date)).getTime(),
-        ),
-      );
-    } catch (err) {
-      console.error("Dashboard load failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+  const { startDate, endDate, setStartDate, setEndDate, filteredBudgets } =
+    useBudgetFilter(budgets);
 
   useEffect(() => {
-    load();
-  }, [load]);
-
-  const handleAddItem = async (item: Omit<BudgetItem, "ItemID" | "UserID">) => {
-    try {
-      await addBudgetItem({
-        ItemID: Date.now(), // More reliable ID for temporary frontend use
-        UserID: userId,
-        ...item,
-      });
-      await load();
-    } catch (err) {
-      console.error("Failed to add budget item:", err);
-      // Fallback for user feedback could be added here
-    }
-  };
-
-  const handleRemoveItem = async (id: number) => {
-    try {
-      if (!id) return;
-      await removeBudgetItem(id.toString());
-      setBudgets((prev) => prev.filter((b) => b.ItemID !== id));
-    } catch (err) {
-      console.error("Failed to remove budget item:", err);
-    }
-  };
+    loadBudgets();
+  }, [loadBudgets]);
 
   return (
     <div className="min-h-screen bg-background font-sans antialiased selection:bg-primary/10">
@@ -150,7 +77,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
 
           <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden border-muted/40">
             <div className="p-6 border-b bg-muted/30 backdrop-blur-sm">
-              <BudgetForm onAdd={handleAddItem} />
+              <BudgetForm onAdd={addItem} />
             </div>
 
             {loading ? (
@@ -162,10 +89,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
               </div>
             ) : (
               <div className="animate-in fade-in duration-500">
-                <BudgetTable
-                  items={filteredBudgets}
-                  onDelete={handleRemoveItem}
-                />
+                <BudgetTable items={filteredBudgets} onDelete={removeItem} />
               </div>
             )}
           </div>

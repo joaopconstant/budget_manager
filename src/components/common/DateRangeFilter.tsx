@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { getTodayString } from "@/lib/dateUtils";
 
 type Props = {
   startDate: string | null;
@@ -14,13 +15,15 @@ export function DateRangeFilter({
   onStartDateChange,
   onEndDateChange,
 }: Props) {
+  const maxDate = getTodayString();
+
   return (
     <div className="flex gap-2">
       <div className="relative">
         <Input
           type="date"
           className="[&::-webkit-calendar-picker-indicator]:opacity-0"
-          max={new Date().toISOString().split("T")[0]}
+          max={maxDate}
           value={startDate ?? ""}
           onChange={(e) => onStartDateChange(e.target.value || null)}
         />
@@ -31,7 +34,7 @@ export function DateRangeFilter({
         <Input
           type="date"
           className="[&::-webkit-calendar-picker-indicator]:opacity-0"
-          max={new Date().toISOString().split("T")[0]}
+          max={maxDate}
           value={endDate ?? ""}
           onChange={(e) => onEndDateChange(e.target.value || null)}
         />

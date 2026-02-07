@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Plus } from "lucide-react";
+import { BUDGET_CATEGORIES } from "@/constants/categories";
+import { formatCurrency } from "@/lib/format";
 import {
   Select,
   SelectContent,
@@ -54,13 +56,7 @@ export function BudgetForm({ onAdd }: Props) {
     setValue(numericValue);
   };
 
-  const displayValue =
-    value === ""
-      ? ""
-      : new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(value);
+  const displayValue = value === "" ? "" : formatCurrency(value);
 
   return (
     <form
@@ -80,12 +76,11 @@ export function BudgetForm({ onAdd }: Props) {
           <SelectValue placeholder="Select Category" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Housing">Housing</SelectItem>
-          <SelectItem value="Food">Food</SelectItem>
-          <SelectItem value="Transport">Transport</SelectItem>
-          <SelectItem value="Leisure">Leisure</SelectItem>
-          <SelectItem value="Health">Health</SelectItem>
-          <SelectItem value="Others">Others</SelectItem>
+          {BUDGET_CATEGORIES.map((category) => (
+            <SelectItem key={category} value={category}>
+              {category}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
