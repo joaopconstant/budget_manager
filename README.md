@@ -57,6 +57,7 @@ All domain entities and service responses are explicitly typed, reducing runtime
 ### Vite
 
 Vite is used as the build tool and dev server to provide:
+
 - Fast startup times
 - Efficient Hot Module Replacement
 - Optimized production builds
@@ -70,6 +71,7 @@ This improves developer experience without adding configuration overhead.
 The UI layer is built with shadcn/ui components styled using Tailwind CSS.
 
 This combination provides:
+
 - Accessible components built on Radix UI primitives
 - A consistent and scalable design system
 - Minimal CSS overhead and predictable styling
@@ -83,6 +85,7 @@ UI components are treated strictly as presentation, with no business logic embed
 Google Sheets is used as a lightweight persistence layer, exposed via Sheets2API.
 
 This decision demonstrates:
+
 - Practical API integration skills
 - Data normalization and transformation on the frontend
 - A pragmatic approach for demos and internal tools
@@ -96,6 +99,7 @@ This is not intended as a production-ready backend, but as a clear and understan
 Google OAuth is used to handle user identity via a trusted external provider.
 
 Important notes:
+
 - OAuth is used for authentication, not for securing the data storage layer.
 - The Sheets API remains publicly accessible for demo purposes.
 - User identity is used to segment and filter data client-side.
@@ -165,15 +169,16 @@ pnpm install
 3. Configure environment variables:
    Create a `.env` file in the root directory and add the following:
 
-   ```env
-   VITE_SHEETS_API_URL=your_sheets2api_endpoint
-   VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-   ```
+```env
+VITE_SHEETS_API_URL=your_sheets2api_endpoint
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
 
 4. Start the development server:
-   ```bash
-   pnpm run dev
-   ```
+
+```bash
+pnpm run dev
+```
 
 ---
 
