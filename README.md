@@ -88,8 +88,8 @@ The project follows a modular architecture to separate concerns and improve read
    pnpm run dev
    ```
 
-## Author
+## TODO
 
-**João Constant**
-Front End Developer Seeking Mid-Level Opportunities
-[LinkedIn](https://www.linkedin.com/in/joaopconstant/) | [joaoconstantdev@gmail.com](mailto:[joaoconstantdev@gmail.com])
+- [ ] Add support for currency selection (USD, BRL, EUR, etc.)
+- [ ] Add support for date formatting selection
+- [ ] Add category input
