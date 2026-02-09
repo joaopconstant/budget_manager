@@ -84,7 +84,7 @@ export function Dashboard({ userId, onLogout }: DashboardProps) {
               <div className="flex flex-col items-center justify-center py-24 gap-4 bg-muted/5">
                 <Spinner className="size-10 text-primary animate-spin" />
                 <p className="text-sm text-muted-foreground font-medium animate-pulse">
-                  Synchronizing with Google Sheets...
+                  Synchronizing Data...
                 </p>
               </div>
             ) : (
